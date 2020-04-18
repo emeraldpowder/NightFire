@@ -1,38 +1,43 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class PlayerGrabTrigger : MonoBehaviour
 {
-    private HashSet<Rigidbody> inGrabTrigger = new HashSet<Rigidbody>();
+    public float GrabRadius = 0.3f;
     public Rigidbody GrabbedObject;
+    
+    private int grabLayerMask;
 
-    private void OnTriggerEnter(Collider other)
+    private void Start()
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Grabbable"))
-        {
-            inGrabTrigger.Add(other.attachedRigidbody);
-            Debug.Log("add");
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Grabbable"))
-        {
-            inGrabTrigger.Remove(other.attachedRigidbody);
-            Debug.Log("remove");
-        }
+        grabLayerMask = LayerMask.GetMask("Firewood", "Tree");
     }
 
     public void Grab()
     {
-        if (inGrabTrigger.Count > 0)
+        Collider[] inGrabTrigger = Physics.OverlapSphere(transform.position, GrabRadius, grabLayerMask);
+        if (inGrabTrigger.Length > 0)
         {
-            GrabbedObject = inGrabTrigger.First();
-            GrabbedObject.isKinematic = true;
-            GrabbedObject.transform.SetParent(transform, true);
+            Rigidbody target = inGrabTrigger[0].attachedRigidbody;
+
+            if (target.isKinematic)
+            {
+                // That's static tree, cut it 
+                target.isKinematic = false;
+                target.transform.SetParent(null, true);
+                target.AddForceAtPosition(
+                    (transform.position - target.position).normalized * 15, 
+                    target.centerOfMass+Vector3.up*3);
+            }
+            else
+            {
+                GrabbedObject = target;
+                GrabbedObject.isKinematic = true;
+                GrabbedObject.transform.SetParent(transform, true);
+            }
         }
     }
 
@@ -40,9 +45,14 @@ public class PlayerGrabTrigger : MonoBehaviour
     {
         if (GrabbedObject != null)
         {
-            GrabbedObject.transform.SetParent(null,true);
+            GrabbedObject.transform.SetParent(null, true);
             GrabbedObject.isKinematic = false;
             GrabbedObject = null;
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, GrabRadius);
     }
 }

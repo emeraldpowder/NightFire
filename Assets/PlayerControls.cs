@@ -43,7 +43,10 @@ public class PlayerControls : MonoBehaviour
 
         animatorComponent.SetFloat(WalkSpeedParam, moveSpeed.magnitude);
 
-        if (moveSpeed.magnitude > 0.1f) transform.LookAt(transform.position + moveSpeed);
+        if (moveSpeed.magnitude > 0.1f)
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveSpeed), Time.deltaTime*360);
+        }
 
         moveSpeed.y = ySpeed + Physics.gravity.y * Time.deltaTime;
         controllerComponent.Move(moveSpeed * Time.deltaTime);
@@ -60,7 +63,6 @@ public class PlayerControls : MonoBehaviour
         }
         
         animatorComponent.SetTrigger(GrabParam);
-        Debug.Log("Grab");
 
         grabCooldown = 5f/6;
     }
