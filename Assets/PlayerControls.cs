@@ -39,13 +39,13 @@ public class PlayerControls : MonoBehaviour
         moveSpeed.y = 0;
         
         Vector3 target = MaxMoveSpeed * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-        moveSpeed = Vector3.MoveTowards(moveSpeed, target, Time.deltaTime * 30);
+        moveSpeed = Vector3.MoveTowards(moveSpeed, target, Time.deltaTime * 300);
 
         animatorComponent.SetFloat(WalkSpeedParam, moveSpeed.magnitude);
 
         if (moveSpeed.magnitude > 0.1f)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveSpeed), Time.deltaTime*360);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveSpeed), Time.deltaTime*720);
         }
 
         moveSpeed.y = ySpeed + Physics.gravity.y * Time.deltaTime;

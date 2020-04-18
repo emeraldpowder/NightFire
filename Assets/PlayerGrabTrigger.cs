@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerGrabTrigger : MonoBehaviour
 {
@@ -37,6 +33,7 @@ public class PlayerGrabTrigger : MonoBehaviour
                 GrabbedObject = target;
                 GrabbedObject.isKinematic = true;
                 GrabbedObject.transform.SetParent(transform, true);
+                GrabbedObject.transform.Translate(-transform.forward*.5f, Space.World);
             }
         }
     }

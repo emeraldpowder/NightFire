@@ -86,14 +86,16 @@ public class Firepit : MonoBehaviour
         Health += target.HealthAddAmount;
         Debug.Log("+" + target.HealthAddAmount);
 
-        Vector3 moveTo = transform.position + Vector3.down * 10;
+        Vector3 moveTo = transform.position + Vector3.down * 12;
         Vector3 velocity = Vector3.zero;
 
-        while (Vector3.Distance(target.transform.position, moveTo) > 0.1f)
+        while (Vector3.Distance(target.transform.position, moveTo) > 1f)
         {
             target.transform.position =
-                Vector3.SmoothDamp(target.transform.position, moveTo, ref velocity, .1f, 8);
+                Vector3.SmoothDamp(target.transform.position, moveTo, ref velocity, .2f, 10);
             yield return null;
         }
+        
+        Destroy(target.gameObject);
     }
 }
