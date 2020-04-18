@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
@@ -6,8 +9,9 @@ public class PlayerControls : MonoBehaviour
     
     private CharacterController controllerComponent;
     private Animator animatorComponent;
+    private PlayerGrabTrigger grabTrigger;
+    
     private Vector3 moveSpeed;
-
     private float grabCooldown;
     
     private static readonly int GrabParam = Animator.StringToHash("grab");
@@ -17,6 +21,8 @@ public class PlayerControls : MonoBehaviour
     {
         animatorComponent = GetComponent<Animator>();
         controllerComponent = GetComponent<CharacterController>();
+
+        grabTrigger = GetComponentInChildren<PlayerGrabTrigger>();
     }
 
     private void Update()
@@ -46,6 +52,12 @@ public class PlayerControls : MonoBehaviour
     private void Grab()
     {
         if (grabCooldown > 0) return;
+
+        if (grabTrigger.GrabbedObject != null)
+        {
+            grabTrigger.Release();
+            return;
+        }
         
         animatorComponent.SetTrigger(GrabParam);
         Debug.Log("Grab");
@@ -55,6 +67,6 @@ public class PlayerControls : MonoBehaviour
 
     public void GrabAnimationCallback()
     {
-        
+        grabTrigger.Grab();
     }
 }
