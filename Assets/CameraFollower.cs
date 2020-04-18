@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraFollower : MonoBehaviour
 {
@@ -8,13 +6,8 @@ public class CameraFollower : MonoBehaviour
     
     private Vector3 velocity;
 
-    private void Start()
-    {
-        
-    }
-
     private void Update()
     {
-        transform.position = Vector3.SmoothDamp(transform.position, Target.position, ref velocity, 0.25f);
+        transform.position = Vector3.SmoothDamp(transform.position, Target.position, ref velocity, 0.18f, 40);
     }
 }

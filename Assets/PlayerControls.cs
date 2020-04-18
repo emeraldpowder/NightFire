@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
@@ -13,6 +10,7 @@ public class PlayerControls : MonoBehaviour
     
     private Vector3 moveSpeed;
     private float grabCooldown;
+    private float dashingTimeLeft;
     
     private static readonly int GrabParam = Animator.StringToHash("grab");
     private static readonly int WalkSpeedParam = Animator.StringToHash("walk speed");
@@ -30,6 +28,7 @@ public class PlayerControls : MonoBehaviour
         UpdateWalk();
 
         if (Input.GetKeyDown(KeyCode.Space)) Grab();
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashingTimeLeft < -.2f) dashingTimeLeft = .3f;
         grabCooldown -= Time.deltaTime;
     }
 
@@ -37,19 +36,34 @@ public class PlayerControls : MonoBehaviour
     {
         float ySpeed = moveSpeed.y;
         moveSpeed.y = 0;
-        
-        Vector3 target = MaxMoveSpeed * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-        moveSpeed = Vector3.MoveTowards(moveSpeed, target, Time.deltaTime * 300);
-
-        animatorComponent.SetFloat(WalkSpeedParam, moveSpeed.magnitude);
-
-        if (moveSpeed.magnitude > 0.1f)
+        if (dashingTimeLeft <= 0)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveSpeed), Time.deltaTime*720);
+            Vector3 target = MaxMoveSpeed *
+                             new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+            moveSpeed = Vector3.MoveTowards(moveSpeed, target, Time.deltaTime * 300);
+
+            animatorComponent.SetFloat(WalkSpeedParam, moveSpeed.magnitude);
+
+            if (moveSpeed.magnitude > 0.1f)
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveSpeed),
+                    Time.deltaTime * 720);
+            }
         }
+        else
+        {
+            moveSpeed = MaxMoveSpeed * 5 * moveSpeed.normalized;
+        }
+        
+        dashingTimeLeft -= Time.deltaTime;
 
         moveSpeed.y = ySpeed + Physics.gravity.y * Time.deltaTime;
         controllerComponent.Move(moveSpeed * Time.deltaTime);
+    }
+
+    private void Dash()
+    {
+        
     }
 
     private void Grab()
@@ -64,7 +78,7 @@ public class PlayerControls : MonoBehaviour
         
         animatorComponent.SetTrigger(GrabParam);
 
-        grabCooldown = 5f/6;
+        grabCooldown = .5f;
     }
 
     public void GrabAnimationCallback()
