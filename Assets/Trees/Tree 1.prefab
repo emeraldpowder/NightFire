@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a726381116425d54d9a06e10cc593307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BaseRenderer: {fileID: 6057292389355984006}
   TreeObjectPrefab: {fileID: 8617018740356087691, guid: 9a0968cd44ecea94d99b31102f130354,
     type: 3}
-  TimeToGrowMin: 35
-  TimeToGrowMax: 40
+  TimeToGrowMin: 150
+  TimeToGrowMax: 170
+  DestroyIfMaxHpBig: 0
 --- !u!1 &2854397036657019022
 GameObject:
   m_ObjectHideFlags: 0

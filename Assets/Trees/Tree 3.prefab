@@ -137,11 +137,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a726381116425d54d9a06e10cc593307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BaseRenderer: {fileID: 19434968211249744}
   TreeObjectPrefab: {fileID: 6501221192161509912, guid: e3543966649d86d41b4c410d8d19cdbf,
     type: 3}
-  TimeToGrowMin: 30
-  TimeToGrowMax: 50
+  TimeToGrowMin: 120
+  TimeToGrowMax: 160
+  DestroyIfMaxHpBig: 0
 --- !u!1001 &7831168791930405815
 PrefabInstance:
   m_ObjectHideFlags: 0

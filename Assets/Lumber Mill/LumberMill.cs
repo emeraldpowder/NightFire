@@ -17,7 +17,7 @@ public class LumberMill : MonoBehaviour
         if (!MainMenu.IsGameStarted) return;
 
         int mask = LayerMask.GetMask("Tree");
-        int count = Physics.OverlapBoxNonAlloc(transform.position + new Vector3(6, 4, 0), new Vector3(15, 10, 13) / 4,
+        int count = Physics.OverlapBoxNonAlloc(transform.position + new Vector3(6, 4, 0), new Vector3(15, 30, 20) / 4,
             colliders, Quaternion.identity, mask);
         for (int i = 0; i < count; i++)
         {
@@ -31,7 +31,7 @@ public class LumberMill : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireCube(transform.position + new Vector3(6, 4, 0), new Vector3(15, 10, 13) / 2);
+        Gizmos.DrawWireCube(transform.position + new Vector3(6, 4, 0), new Vector3(15, 30, 20) / 2);
     }
 
     private IEnumerator ConsumeTree(Rigidbody treeBody)

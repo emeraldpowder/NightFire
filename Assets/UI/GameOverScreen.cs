@@ -9,9 +9,16 @@ public class GameOverScreen : MonoBehaviour
     private void OnEnable()
     {
         MainMenu.IsGameStarted = false;
+
+        float time = Firepit.TimePassed;
+        int minutes = (int)time / 60;
+        int seconds = (int)time % 60;
         
-        int minutes = (int)Time.timeSinceLevelLoad / 60;
-        int seconds = (int)Time.timeSinceLevelLoad % 60;
+        int best = PlayerPrefs.GetInt("BestTime", 0);
+        if (time > best)
+        {
+            PlayerPrefs.SetInt("BestTime", (int) time);
+        }
 
         string message;
         if (minutes <= 2) message = "Could've been better";

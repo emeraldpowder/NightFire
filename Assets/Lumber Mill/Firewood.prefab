@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb8223f52c5966c4693a5b2b72950943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthAddAmount: 0.07
+  HealthAddAmount: 0.09
   MaxHealthAddAmount: 0
   ThrowPrefab: {fileID: 0}
 --- !u!1001 &2416578410000030459

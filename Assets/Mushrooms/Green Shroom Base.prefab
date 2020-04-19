@@ -138,8 +138,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TreeObjectPrefab: {fileID: 6390692001570132880, guid: a442d4a7a00bdc946b14c0fb072d19c8,
     type: 3}
-  TimeToGrowMin: 50
-  TimeToGrowMax: 75
+  TimeToGrowMin: 150
+  TimeToGrowMax: 200
+  DestroyIfMaxHpBig: 0
 --- !u!1001 &8576466750929409657
 PrefabInstance:
   m_ObjectHideFlags: 0

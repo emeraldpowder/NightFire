@@ -12,6 +12,7 @@ public class Firepit : MonoBehaviour
     public AnimationCurve DifficultyCurve;
 
     [Header("UI")] public Text HpText;
+    public Text TimeText;
     public Image HpBar;
     public HpAddedText HpAddedTextPrefab;
     public HpAddedText MaxHpAddedTextPrefab;
@@ -26,6 +27,7 @@ public class Firepit : MonoBehaviour
     public Light FirepitLight;
 
     public static Firepit Instance;
+    public static float TimePassed; 
     
     private Vector3 lightInitialPosition;
     private ParticleSystem[] LogParticles;
@@ -42,6 +44,8 @@ public class Firepit : MonoBehaviour
         LogParticles = Logs.Select(l => l.GetComponentInChildren<ParticleSystem>()).ToArray();
 
         lastHpBarFill = Health;
+        
+        TimePassed = 0;
     }
 
     private void Update()
@@ -58,7 +62,13 @@ public class Firepit : MonoBehaviour
 
         if (!MainMenu.IsGameStarted) return;
 
-        Health -= Time.deltaTime / MaxHealthSeconds * DifficultyCurve.Evaluate(Time.timeSinceLevelLoad);
+        TimePassed += Time.deltaTime;
+
+        int minutes = (int) TimePassed / 60;
+        int seconds = (int) TimePassed % 60;
+        TimeText.text = $"{minutes:00}:{seconds:00}";
+
+        Health -= Time.deltaTime / MaxHealthSeconds * DifficultyCurve.Evaluate(TimePassed);
         if (Health <= 0.001f)
         {
             GameOverScreen.gameObject.SetActive(true);
@@ -150,6 +160,7 @@ public class Firepit : MonoBehaviour
         if (amount > 0)
         {
             Health += amount;
+            if (Health > 1) Health = 1;
 
             HpAddedText hpAddedText = Instantiate(HpAddedTextPrefab, HpText.transform.root);
             hpAddedText.SetText((int) (amount * MaxHealthSeconds));

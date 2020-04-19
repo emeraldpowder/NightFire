@@ -3,6 +3,8 @@
 public class LanternSpawner : MonoBehaviour
 {
     public Rigidbody LanternPrefab;
+
+    public int RespawnTime = 30;
     
     private Rigidbody currentLantern;
     private Camera mainCamera;
@@ -21,7 +23,7 @@ public class LanternSpawner : MonoBehaviour
         {
             // Player has taken lantern
             lanternSpawnScheduled = true;
-            Invoke(nameof(SpawnAnotherLantern), 30);
+            Invoke(nameof(SpawnAnotherLantern), RespawnTime);
         }
     }
 

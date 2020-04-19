@@ -6,15 +6,15 @@ public class PlayerControls : MonoBehaviour
 
     public AudioSource DashSound;
     public AudioSource StepSound;
-    
+
     private CharacterController controllerComponent;
     private Animator animatorComponent;
     private PlayerGrabTrigger grabTrigger;
-    
+
     private Vector3 moveSpeed;
     private float grabCooldown;
     private float dashingTimeLeft;
-    
+
     private static readonly int GrabParam = Animator.StringToHash("grab");
     private static readonly int WalkSpeedParam = Animator.StringToHash("walk speed");
 
@@ -28,13 +28,16 @@ public class PlayerControls : MonoBehaviour
 
     private void Update()
     {
-        if (!MainMenu.IsGameStarted) return;
-        
-        UpdateWalk();
+        if (MainMenu.IsGameStarted)
+        {
+            UpdateWalk();
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightControl)) Grab();
-        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) Dash();
-        grabCooldown -= Time.deltaTime;
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightControl)) Grab();
+            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) Dash();
+            grabCooldown -= Time.deltaTime;
+        }
+
+        animatorComponent.SetFloat(WalkSpeedParam, new Vector3(moveSpeed.x,0,moveSpeed.z).magnitude);
     }
 
     private void Dash()
@@ -49,7 +52,7 @@ public class PlayerControls : MonoBehaviour
     public void StepAnimationCallback()
     {
         if (dashingTimeLeft > 0) return;
-            
+
         if (StepSound.pitch < 1) StepSound.pitch = Random.Range(1.05f, 1.15f);
         else StepSound.pitch = Random.Range(0.9f, 0.95f);
         StepSound.Play();
@@ -65,8 +68,6 @@ public class PlayerControls : MonoBehaviour
                              new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
             moveSpeed = Vector3.MoveTowards(moveSpeed, target, Time.deltaTime * 300);
 
-            animatorComponent.SetFloat(WalkSpeedParam, moveSpeed.magnitude);
-
             if (moveSpeed.magnitude > 0.1f)
             {
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveSpeed),
@@ -77,7 +78,7 @@ public class PlayerControls : MonoBehaviour
         {
             moveSpeed = MaxMoveSpeed * 5 * moveSpeed.normalized;
         }
-        
+
         dashingTimeLeft -= Time.deltaTime;
 
         moveSpeed.y = ySpeed + Physics.gravity.y * Time.deltaTime;
@@ -93,7 +94,7 @@ public class PlayerControls : MonoBehaviour
             grabTrigger.Release();
             return;
         }
-        
+
         animatorComponent.SetTrigger(GrabParam);
 
         grabCooldown = .5f;

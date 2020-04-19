@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class MainMenu : MonoBehaviour
     public Transform MenuCameraPosition;
     public GameObject DisableOnStart;
     public GameObject EnableOnStart;
+
+    public Text BestTimeText;
     
     private Camera mainCamera;
     private Vector3 playCameraPosition;
@@ -17,6 +20,11 @@ public class MainMenu : MonoBehaviour
     private void Start()
     {
         mainCamera = Camera.main;
+
+        int best = PlayerPrefs.GetInt("BestTime", 0);
+        int minutes = (int)best / 60;
+        int seconds = (int)best % 60;
+        BestTimeText.text = $"Best: {minutes:00}:{seconds:00}";
 
         if (IsGameStarted)
         {
@@ -61,6 +69,6 @@ public class MainMenu : MonoBehaviour
         IsGameStarted = true;
         EnableOnStart.SetActive(true);
         
-        Destroy(gameObject);
+        Destroy(this);
     }
 }
