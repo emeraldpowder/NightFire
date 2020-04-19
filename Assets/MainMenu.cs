@@ -26,6 +26,7 @@ public class MainMenu : MonoBehaviour
         int seconds = (int)best % 60;
         BestTimeText.text = $"Best: {minutes:00}:{seconds:00}";
 
+        Cursor.visible = !IsGameStarted;
         if (IsGameStarted)
         {
             DisableOnStart.SetActive(false);
@@ -67,6 +68,7 @@ public class MainMenu : MonoBehaviour
         mainCamera.transform.rotation = playCameraRotation;
 
         IsGameStarted = true;
+        Cursor.visible = false;
         EnableOnStart.SetActive(true);
         
         Destroy(this);

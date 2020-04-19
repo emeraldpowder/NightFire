@@ -9,6 +9,7 @@ public class GameOverScreen : MonoBehaviour
     private void OnEnable()
     {
         MainMenu.IsGameStarted = false;
+        Cursor.visible = true;
 
         float time = Firepit.TimePassed;
         int minutes = (int)time / 60;
