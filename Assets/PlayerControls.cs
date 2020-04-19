@@ -32,13 +32,18 @@ public class PlayerControls : MonoBehaviour
         
         UpdateWalk();
 
-        if (Input.GetKeyDown(KeyCode.Space)) Grab();
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashingTimeLeft < -.2f)
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightControl)) Grab();
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) Dash();
+        grabCooldown -= Time.deltaTime;
+    }
+
+    private void Dash()
+    {
+        if (dashingTimeLeft < -.2f)
         {
             dashingTimeLeft = .3f;
             DashSound.Play();
         }
-        grabCooldown -= Time.deltaTime;
     }
 
     public void StepAnimationCallback()
@@ -77,11 +82,6 @@ public class PlayerControls : MonoBehaviour
 
         moveSpeed.y = ySpeed + Physics.gravity.y * Time.deltaTime;
         controllerComponent.Move(moveSpeed * Time.deltaTime);
-    }
-
-    private void Dash()
-    {
-        
     }
 
     private void Grab()
