@@ -22,6 +22,11 @@ public class GameOverScreen : MonoBehaviour
             $"Fire is faded out. Game over.\n\nYou held up for <color=#E7834F>{minutes}</color> minutes <color=#E7834F>{seconds}</color> seconds.\n{message}";
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space)) Restart();
+    }
+
     public void Restart()
     {
         MainMenu.IsGameStarted = true;

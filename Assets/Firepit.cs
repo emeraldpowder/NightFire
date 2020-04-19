@@ -15,6 +15,10 @@ public class Firepit : MonoBehaviour
     public Image HpBar;
     public HpAddedText HpAddedTextPrefab;
     public GameOverScreen GameOverScreen;
+
+    [Header("Audio")] public AudioSource WoodBurntSound;
+    public AudioSource GameOverSound;
+    public AudioSource FireLoopSound;
     
     [Header("Stuff")]
     public GameObject[] Logs;
@@ -37,6 +41,8 @@ public class Firepit : MonoBehaviour
 
     private void Update()
     {
+        FireLoopSound.volume = Mathf.Lerp(0.2f, 0.8f, Health);
+        
         FirepitLight.intensity = Mathf.Lerp(1, 4, Health) + Mathf.Sin(Time.time * 3 + Random.value * .5f) * .2f;
         FirepitLight.transform.position = lightInitialPosition + new Vector3(
                                               Mathf.Sin(Time.time * 2) + Mathf.Sin(Time.time * Mathf.PI * 1.2f),
@@ -48,7 +54,11 @@ public class Firepit : MonoBehaviour
         if (!MainMenu.IsGameStarted) return;
         
         Health -= Time.deltaTime / MaxHealthSeconds;
-        if (Health <= 0.001f) GameOverScreen.gameObject.SetActive(true);
+        if (Health <= 0.001f)
+        {
+            GameOverScreen.gameObject.SetActive(true);
+            GameOverSound.Play();
+        }
         
         UpdateLogs();
         UpdateUI();
@@ -107,6 +117,8 @@ public class Firepit : MonoBehaviour
 
         Destroy(colliderInFire);
         Destroy(colliderInFire.attachedRigidbody);
+        
+        WoodBurntSound.Play();
 
         Health += target.HealthAddAmount;
 

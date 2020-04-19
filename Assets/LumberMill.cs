@@ -8,6 +8,8 @@ public class LumberMill : MonoBehaviour
     public Rigidbody FirewoodPrefab;
     public Transform[] FirewoodSpawns;
 
+    public AudioSource WorkSound;
+
     private Collider[] colliders = new Collider[10];
 
     private void Update()
@@ -40,13 +42,15 @@ public class LumberMill : MonoBehaviour
         Vector3 moveTo = transform.position + new Vector3(3, 2, 0);
         Vector3 velocity = Vector3.zero;
         float scaleVelocity = 0;
+        
+        WorkSound.Play();
 
         while (Vector3.Distance(tree.transform.position, moveTo) > 1f)
         {
             tree.transform.position =
                 Vector3.SmoothDamp(tree.transform.position, moveTo, ref velocity, .2f, 10);
             tree.transform.localScale =
-                Mathf.SmoothDamp(tree.transform.localScale.x, 0, ref scaleVelocity, 2f) * Vector3.one;
+                Mathf.SmoothDamp(tree.transform.localScale.x, 0, ref scaleVelocity, 1.5f) * Vector3.one;
             yield return null;
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
@@ -30,6 +31,11 @@ public class MainMenu : MonoBehaviour
             mainCamera.transform.position = MenuCameraPosition.position;
             mainCamera.transform.rotation = MenuCameraPosition.rotation;
         }
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space) && DisableOnStart.activeSelf) StartGame();
     }
 
     public void StartGame()

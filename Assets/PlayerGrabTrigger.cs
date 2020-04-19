@@ -4,6 +4,9 @@ public class PlayerGrabTrigger : MonoBehaviour
 {
     public float GrabRadius = 0.3f;
     public Rigidbody GrabbedObject;
+
+    public AudioSource ChopTreeSound;
+    public AudioSource GrabSound;
     
     private int grabLayerMask;
 
@@ -29,6 +32,8 @@ public class PlayerGrabTrigger : MonoBehaviour
                     target.AddForceAtPosition(
                         (transform.position - target.position).normalized * 15,
                         target.centerOfMass + Vector3.up * 3);
+                    
+                    ChopTreeSound.Play();
                 }
             }
             else
@@ -37,6 +42,8 @@ public class PlayerGrabTrigger : MonoBehaviour
                 GrabbedObject.isKinematic = true;
                 GrabbedObject.transform.SetParent(transform, true);
                 GrabbedObject.transform.Translate(-transform.forward*.5f, Space.World);
+                
+                GrabSound.Play();
             }
         }
     }

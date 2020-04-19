@@ -2,7 +2,10 @@
 
 public class PlayerControls : MonoBehaviour
 {
-    public float MaxMoveSpeed = 8; 
+    public float MaxMoveSpeed = 8;
+
+    public AudioSource DashSound;
+    public AudioSource StepSound;
     
     private CharacterController controllerComponent;
     private Animator animatorComponent;
@@ -30,8 +33,21 @@ public class PlayerControls : MonoBehaviour
         UpdateWalk();
 
         if (Input.GetKeyDown(KeyCode.Space)) Grab();
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashingTimeLeft < -.2f) dashingTimeLeft = .3f;
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashingTimeLeft < -.2f)
+        {
+            dashingTimeLeft = .3f;
+            DashSound.Play();
+        }
         grabCooldown -= Time.deltaTime;
+    }
+
+    public void StepAnimationCallback()
+    {
+        if (dashingTimeLeft > 0) return;
+            
+        if (StepSound.pitch < 1) StepSound.pitch = Random.Range(1.05f, 1.15f);
+        else StepSound.pitch = Random.Range(0.9f, 0.95f);
+        StepSound.Play();
     }
 
     private void UpdateWalk()
