@@ -21,12 +21,15 @@ public class PlayerGrabTrigger : MonoBehaviour
 
             if (target.isKinematic)
             {
-                // That's static tree, cut it 
-                target.isKinematic = false;
-                target.transform.SetParent(null, true);
-                target.AddForceAtPosition(
-                    (transform.position - target.position).normalized * 15, 
-                    target.centerOfMass+Vector3.up*3);
+                if (target.gameObject.layer == LayerMask.NameToLayer("Tree"))
+                {
+                    // That's static tree, cut it 
+                    target.isKinematic = false;
+                    target.transform.SetParent(null, true);
+                    target.AddForceAtPosition(
+                        (transform.position - target.position).normalized * 15,
+                        target.centerOfMass + Vector3.up * 3);
+                }
             }
             else
             {

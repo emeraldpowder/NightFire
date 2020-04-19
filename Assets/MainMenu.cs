@@ -7,20 +7,26 @@ public class MainMenu : MonoBehaviour
 
     public Transform MenuCameraPosition;
     public GameObject DisableOnStart;
+    public GameObject EnableOnStart;
     
     private Camera mainCamera;
     private Vector3 playCameraPosition;
     private Quaternion playCameraRotation;
 
-    void Start()
+    private void Start()
     {
         mainCamera = Camera.main;
-        
-        if (!IsGameStarted)
+
+        if (IsGameStarted)
+        {
+            DisableOnStart.SetActive(false);
+            EnableOnStart.SetActive(true);
+        }
+        else
         {
             playCameraPosition = mainCamera.transform.position;
             playCameraRotation = mainCamera.transform.rotation;
-            
+
             mainCamera.transform.position = MenuCameraPosition.position;
             mainCamera.transform.rotation = MenuCameraPosition.rotation;
         }
@@ -47,6 +53,7 @@ public class MainMenu : MonoBehaviour
         mainCamera.transform.rotation = playCameraRotation;
 
         IsGameStarted = true;
+        EnableOnStart.SetActive(true);
         
         Destroy(gameObject);
     }

@@ -14,6 +14,7 @@ public class Firepit : MonoBehaviour
     [Header("UI")] public Text HpText;
     public Image HpBar;
     public HpAddedText HpAddedTextPrefab;
+    public GameOverScreen GameOverScreen;
     
     [Header("Stuff")]
     public GameObject[] Logs;
@@ -47,6 +48,7 @@ public class Firepit : MonoBehaviour
         if (!MainMenu.IsGameStarted) return;
         
         Health -= Time.deltaTime / MaxHealthSeconds;
+        if (Health <= 0.001f) GameOverScreen.gameObject.SetActive(true);
         
         UpdateLogs();
         UpdateUI();
