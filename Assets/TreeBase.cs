@@ -27,14 +27,14 @@ public class TreeBase : MonoBehaviour
 
     private void PositionTree()
     {
-        if (Physics.Raycast(transform.position + Vector3.up * 10, Vector3.down, out var hit, 20,
+        if (Physics.Raycast(transform.position + Vector3.up * 100, Vector3.down, out var hit, 200,
             LayerMask.GetMask("Ground")))
         {
             transform.position = hit.point - hit.normal * .1f;
 
             Vector3 normal = hit.normal;
 
-            while (Vector3.Angle(normal, Vector3.up) > 10) normal.y += .1f;
+            while (Vector3.Angle(normal, Vector3.up) > 8) normal.y += .1f;
             normal.Normalize();
 
             Vector3 fwd = Vector3.Cross(normal, Vector3.right).normalized;

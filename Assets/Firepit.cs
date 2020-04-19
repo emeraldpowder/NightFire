@@ -2,30 +2,40 @@
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class Firepit : MonoBehaviour
 {
-    public GameObject[] Logs;
-    public Light FirepitLight;
-
+    [Header("Settings")]
+    public int MaxHealthSeconds = 120;
     [Range(0, 1)] public float Health = 1;
 
+    [Header("UI")] public Text HpText;
+    public Image HpBar;
+    public HpAddedText HpAddedTextPrefab;
+    
+    [Header("Stuff")]
+    public GameObject[] Logs;
+    public Light FirepitLight;
+    
     private Vector3 lightInitialPosition;
     private ParticleSystem[] LogParticles;
     private Collider[] colliders = new Collider[10];
+
+    private float lastHpBarFill;
 
     private void Start()
     {
         lightInitialPosition = FirepitLight.transform.position;
 
         LogParticles = Logs.Select(l => l.GetComponentInChildren<ParticleSystem>()).ToArray();
+
+        lastHpBarFill = Health;
     }
 
     private void Update()
     {
-        Health -= Time.deltaTime / 120; // 120s for full fire burnout
-
         FirepitLight.intensity = Mathf.Lerp(1, 4, Health) + Mathf.Sin(Time.time * 3 + Random.value * .5f) * .2f;
         FirepitLight.transform.position = lightInitialPosition + new Vector3(
                                               Mathf.Sin(Time.time * 2) + Mathf.Sin(Time.time * Mathf.PI * 1.2f),
@@ -34,7 +44,12 @@ public class Firepit : MonoBehaviour
                                               Mathf.Sin(Time.time * 2.4f) + Mathf.Sin(Time.time * Mathf.PI)
                                           ) * .05f; // For nice light cracking animation
 
+        if (!MainMenu.IsGameStarted) return;
+        
+        Health -= Time.deltaTime / MaxHealthSeconds;
+        
         UpdateLogs();
+        UpdateUI();
         CheckAnyFuelThrowed();
     }
 
@@ -51,6 +66,14 @@ public class Firepit : MonoBehaviour
             if (active && !LogParticles[i].isPlaying) LogParticles[i].Play();
             else if (!active && LogParticles[i].isPlaying) LogParticles[i].Stop();
         }
+    }
+
+    private void UpdateUI()
+    {
+        int health = (int) (MaxHealthSeconds * Health);
+        HpText.text = $"{health}<size=30> / {MaxHealthSeconds}</size>";
+        lastHpBarFill = Mathf.Lerp(lastHpBarFill, Health, Time.deltaTime*2);
+        HpBar.fillAmount = lastHpBarFill;
     }
 
     private void CheckAnyFuelThrowed()
@@ -84,7 +107,9 @@ public class Firepit : MonoBehaviour
         Destroy(colliderInFire.attachedRigidbody);
 
         Health += target.HealthAddAmount;
-        Debug.Log("+" + target.HealthAddAmount);
+
+        HpAddedText hpAddedText = Instantiate(HpAddedTextPrefab, HpText.transform.root);
+        hpAddedText.SetText((int) (target.HealthAddAmount * MaxHealthSeconds));
 
         Vector3 moveTo = transform.position + Vector3.down * 12;
         Vector3 velocity = Vector3.zero;

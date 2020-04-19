@@ -25,6 +25,8 @@ public class PlayerControls : MonoBehaviour
 
     private void Update()
     {
+        if (!MainMenu.IsGameStarted) return;
+        
         UpdateWalk();
 
         if (Input.GetKeyDown(KeyCode.Space)) Grab();
