@@ -32,17 +32,18 @@ public class PlayerControls : MonoBehaviour
         {
             UpdateWalk();
 
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightControl)) Grab();
-            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) Dash();
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.Z)) Grab();
+            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift) || Input.GetKeyDown(KeyCode.X)) Dash(false);
+            else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.X)) Dash(true);
             grabCooldown -= Time.deltaTime;
         }
 
         animatorComponent.SetFloat(WalkSpeedParam, new Vector3(moveSpeed.x,0,moveSpeed.z).magnitude);
     }
 
-    private void Dash()
+    private void Dash(bool holding)
     {
-        if (dashingTimeLeft < -.2f)
+        if (dashingTimeLeft < (holding ? -.4f : -.2f))
         {
             dashingTimeLeft = .3f;
             DashSound.Play();
